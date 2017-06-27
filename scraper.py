@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 
 URL = 'https://www.corotos.com.do/republica_dominicana/animales_y_mascotas-en_venta'
 PET_NUM_NDX = 0
- 
-def get_puppies():
+
+def get_pets():
+
     r = requests.get(URL)
     soup = BeautifulSoup(r.text, 'html.parser')
     pets = []
