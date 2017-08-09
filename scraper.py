@@ -31,11 +31,14 @@ def message(recipient, body):
  
 if __name__ == '__main__':
     pets = get_pets()
-    for pet in pets:
-        if 'johnson' or 'king charles' not in pet.lower():
-            continue
- 
-        to_notify = redis_client.smembers(pet)
-        for user in to_notify:
-            message(user.decode('utf-8'), body="Good news! We found a {pet}.")
-            redis_client.srem(pet, user)
+    for subscription in redis_client.smembers('subscribed_pets'):
+        found = []
+        for pet in pets:
+            if subscription not in pet.lower():
+                continue
+            found.append(pet)
+        if found:
+            for user in redis_client.smembers(subscription):
+                message(user.decode('utf-8'), body="Good news! We found a " + ', and a '.join(found) + ".")
+                redis_client.srem(subscription, user)
+            redis_client.srem('subscribed_pets', subscription)
