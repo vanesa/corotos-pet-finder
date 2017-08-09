@@ -14,7 +14,6 @@ def get_pets():
     r = requests.get(URL)
     soup = BeautifulSoup(r.text, 'html.parser')
     pets = []
-    found_pet = False
  
     for titles in soup.find_all('h2'):
         links = [e.text for e in titles.find_all('a')]
