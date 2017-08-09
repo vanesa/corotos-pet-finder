@@ -22,13 +22,14 @@ def handle_sms():
 		return '', 400
 
 	user = request.form['From']
-	pet = request.form['Body'].strip().lower()
+	target_pet = request.form['Body'].strip().lower()
 	
-	if pet not in requested_pets:
-		return respond(user, body="Hm, that doesn't look like a valid pet. Try something like 'Johnson'.")
+	if target_pet not in requested_pets:
+		return respond(user, body="Hm, that doesn't look like a valid pet. Try something like 'Beagle'.")
 
-	redis_client.sadd(pet, user.encode('utf-8'))
-	return respond(user, body="Sweet action. We'll let you know when there are {pet}'s available.")
+	redis_client.sadd('subscribed_pets', target_pet)
+	redis_client.sadd(target_pet, user.encode('utf-8'))
+	return respond(user, body="Sweet action. We'll let you know when there are " + target_pet.capitalize() + "'s available.")
 
 
 if __name__ == '__main__':
