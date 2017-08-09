@@ -19,7 +19,7 @@ def get_pets():
     for titles in soup.find_all('h2'):
         links = [e.text for e in titles.find_all('a')]
         if links:
-            pets.append(links[PET_NUM_NDX])
+            pets.append(links[PET_NUM_NDX].strip())
 
     return pets
 
