@@ -3,7 +3,7 @@ import redis
 from secrets import twilio_account_sid, token, my_number
 from twilio.twiml.messaging_response import MessagingResponse
 
-requested_pets = {'beagle', 'king charles spaniel', 'cavalier', 'shihtzu'}
+requested_pets = {'beagle', 'king charles spaniel', 'cavalier', 'shihtzu', 'boxer', 'yorkie'}
 
 app = Flask(__name__)
 
