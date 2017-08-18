@@ -3,7 +3,17 @@ import redis
 from secrets import twilio_account_sid, token, my_number
 from twilio.twiml.messaging_response import MessagingResponse
 
-requested_pets = {'beagle', 'king charles spaniel', 'cavalier', 'shihtzu', 'boxer', 'yorkie'}
+# Dog breeds from https://dog.ceo/api/breeds/list
+dog_breeds = {"affenpinscher", "african", "airedale", "akita", "appenzeller", "basenji", "beagle",
+"bluetick", "borzoi", "bouvier", "boxer", "brabancon", "briard", "bulldog", "bullterrier", "cairn",
+"chihuahua", "chow", "clumber", "collie", "coonhound", "corgi", "dachshund", "dane", "deerhound",
+"dhole", "dingo", "doberman", "elkhound", "entlebucher", "eskimo", "germanshepherd", "greyhound", "groenendael",
+"hound", "husky", "keeshond", "kelpie", "komondor", "kuvasz", "labrador", "leonberg", "lhasa", "malamute", "malinois",
+"maltese", "mastiff", "mexicanhairless", "mountain", "newfoundland", "otterhound", "papillon", "pekinese",
+"pembroke", "pinscher", "pointer", "pomeranian", "poodle", "pug", "pyrenees", "redbone", "retriever", "ridgeback",
+"rottweiler", "saluki","samoyed", "schipperke", "schnauzer", "setter", "sheepdog", "shiba", "shihtzu", "spaniel",
+"springer", "stbernard", "terrier", "vizsla", "weimaraner", "whippet", "wolfhound"}
+
 
 app = Flask(__name__)
 
@@ -22,14 +32,14 @@ def handle_sms():
 		return '', 400
 
 	user = request.form['From']
-	target_pet = request.form['Body'].strip().lower()
+	target_dog = request.form['Body'].strip().lower()
 	
-	if target_pet not in requested_pets:
-		return respond(user, body="Hm, that doesn't look like a valid pet. Try something like 'Beagle'.")
+	if target_dog not in dog_breeds:
+		return respond(user, body="Hm, that doesn't look like a valid dog breed. Try something like 'Beagle'.")
 
-	redis_client.sadd('subscribed_pets', target_pet)
-	redis_client.sadd(target_pet, user.encode('utf-8'))
-	return respond(user, body="Sweet action. We'll let you know when there are " + target_pet.capitalize() + "'s available.")
+	redis_client.sadd('subscribed_dogs', target_dog)
+	redis_client.sadd(target_dog, user.encode('utf-8'))
+	return respond(user, body="Sweet action. We'll let you know when there are " + target_dog.capitalize() + "'s available.")
 
 
 if __name__ == '__main__':
